@@ -1,35 +1,26 @@
-install.packages("UsingR")
+library(UsingR)
 data(InsectSprays)
-data=InsectSprays
-attach(data)
-head(data)
-is.factor(spray)
-is.integer(spray)
-install.packages("PASWR")
-library(PASWR)
-oneway.plots(count,spray)
-summary(aov(count~spray))
-
-
+attach(InsectSprays)
+dim(InsectSprays)
+[1] 72 2
+summary(aov(count~factor(spray)))
 Df Sum Sq Mean Sq F value Pr(>F)    
-spray        5   2669   533.8    34.7 <2e-16 ***
-  Residuals   66   1015    15.4                   
+factor(spray)  5   2669   533.8    34.7 <2e-16 ***
+  Residuals     66   1015    15.4                   
 ---
   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-
-
-TukeyHSD(aov(count~spray))
-
-
+#We can display the information graphically using oneway.plot
+library(PASWR)
+oneway.plots(count,spray)
+#It appears that the spray variable is a significant variable which leads to conclude that the treatment type makes
+# a difference. In order to perform the pairwise comparison we use the Tukey’s HSD test using R code below
+TukeyHSD(aov(count~factor(spray)))
 Tukey multiple comparisons of means
 95% family-wise confidence level
 
-Fit: aov(formula = count ~ spray)
+Fit: aov(formula = count ~ factor(spray))
 
-$spray
-
-
+$`factor(spray)`
 diff        lwr       upr     p adj
 B-A   0.8333333  -3.866075  5.532742 0.9951810
 C-A -12.4166667 -17.116075 -7.717258 0.0000000
@@ -47,6 +38,5 @@ E-D  -1.4166667  -6.116075  3.282742 0.9488669
 F-D  11.7500000   7.050591 16.449409 0.0000000
 F-E  13.1666667   8.467258 17.866075 0.0000000
 
-
-
-plot(TukeyHSD(aov(count~spray)),col=c(1:6),col.main=43,col.lab=87)
+#It appears that there is a difference between the following spray types:
+# A and C, A and D, A and E, B and C, B and D, B and E, C and F, D and F, and between E and F.
